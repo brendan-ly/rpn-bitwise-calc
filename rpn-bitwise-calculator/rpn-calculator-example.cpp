@@ -65,10 +65,19 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
             return nullptr;
         }
         case cmd_pop: {
+            // if (stack.empty()) {
+            //     return nullptr;
+            // } else {
+            //     stack.pop();
+            //     if (stack.empty()) {
+            //         return nullptr;
+            //     }
+            //     return make_shared<uint16_t>(stack.top());
+            // }
+            stack.pop();
             if (stack.empty()) {
                 return nullptr;
             } else {
-                stack.pop();
                 return make_shared<uint16_t>(stack.top());
             }
         }
@@ -94,6 +103,21 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
 
             return make_shared<uint16_t>(stack.top());
 
+        }
+        case cmd_right_shift: {
+            if (stack.size() < 2) {
+                return nullptr;
+            }
+
+            uint16_t a = stack.top(); 
+            stack.pop();
+            uint16_t b = stack.top();
+            stack.pop();
+            uint16_t result = b >> a;
+
+            stack.push(result);
+
+            return make_shared<uint16_t>(stack.top());
         }
 
         default: 
