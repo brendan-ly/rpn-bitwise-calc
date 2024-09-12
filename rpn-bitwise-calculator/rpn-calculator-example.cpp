@@ -65,21 +65,21 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
             return nullptr;
         }
         case cmd_pop: {
-            // if (stack.empty()) {
-            //     return nullptr;
-            // } else {
-            //     stack.pop();
-            //     if (stack.empty()) {
-            //         return nullptr;
-            //     }
-            //     return make_shared<uint16_t>(stack.top());
-            // }
-            stack.pop();
             if (stack.empty()) {
                 return nullptr;
             } else {
+                stack.pop();
+                if (stack.empty()) {
+                    return nullptr;
+                }
                 return make_shared<uint16_t>(stack.top());
             }
+            // stack.pop();
+            // if (stack.empty()) {
+            //     return nullptr;
+            // } else {
+            //     return make_shared<uint16_t>(stack.top());
+            // }
         }
         case cmd_top: {
             if (stack.empty()) {
@@ -135,13 +135,53 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
 
             return make_shared<uint16_t>(stack.top());
         }
+        case cmd_and: {
+            if (stack.size() < 2) {
+                return nullptr;
+            }
+
+            uint16_t a = stack.top(); 
+            stack.pop();
+            uint16_t b = stack.top();
+            stack.pop();
+            uint16_t result = a & b;
+
+            stack.push(result);
+
+            return make_shared<uint16_t>(stack.top());
+        }
+        case cmd_add: {
+            if (stack.size() < 2) {
+                return nullptr;
+            }
+
+            uint16_t a = stack.top(); 
+            stack.pop();
+            uint16_t b = stack.top();
+            stack.pop();
+
+            uint16_t add_result = a;
+            uint16_t carry = b;
+
+            while (carry != 0) {
+                uint16_t new_carry = (add_result & carry) << 1;
+                add_result = add_result ^ carry;
+                carry = new_carry;
+            }
+            if ((add_result < a) || (add_result < b)) {
+                stack.push(b);
+                stack.push(a);
+                return nullptr;
+            }
+
+            stack.push(add_result);
+            return make_shared<uint16_t>(stack.top());
+
+        }
 
         default: 
             return nullptr;
     }
-
-    // shared_ptr<uint16_t> result = make_shared<uint16_t>(val);
-    // return result;
 }
 
 /*
