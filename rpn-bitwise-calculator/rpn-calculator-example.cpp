@@ -56,15 +56,21 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
     switch (cmd) {
         case cmd_enter: {
             stack.push(value);
-
             return make_shared<uint16_t>(stack.top());
         }
-
         case cmd_clear: {
             while (!stack.empty()) {
                 stack.pop();
             }
             return nullptr;
+        }
+        case cmd_pop: {
+            if (stack.empty()) {
+                return nullptr;
+            } else {
+                stack.pop();
+                return make_shared<uint16_t>(stack.top());
+            }
         }
 
         default: 
