@@ -57,29 +57,23 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
         case cmd_enter: {
             stack.push(value);
             return make_shared<uint16_t>(stack.top());
+            break;
         }
         case cmd_clear: {
             while (!stack.empty()) {
                 stack.pop();
             }
             return nullptr;
+            break;
         }
         case cmd_pop: {
+            stack.pop();
             if (stack.empty()) {
                 return nullptr;
             } else {
-                stack.pop();
-                if (stack.empty()) {
-                    return nullptr;
-                }
                 return make_shared<uint16_t>(stack.top());
             }
-            // stack.pop();
-            // if (stack.empty()) {
-            //     return nullptr;
-            // } else {
-            //     return make_shared<uint16_t>(stack.top());
-            // }
+            break;
         }
         case cmd_top: {
             if (stack.empty()) {
@@ -87,6 +81,7 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
             } else {
                 return make_shared<uint16_t>(stack.top());
             }
+            break;
         }
         case cmd_left_shift: {
             if (stack.size() < 2) {
@@ -102,7 +97,7 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
             stack.push(result);
 
             return make_shared<uint16_t>(stack.top());
-
+            break;
         }
         case cmd_right_shift: {
             if (stack.size() < 2) {
@@ -118,6 +113,7 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
             stack.push(result);
 
             return make_shared<uint16_t>(stack.top());
+            break;
         }
 
         case cmd_or: {
@@ -134,6 +130,7 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
             stack.push(result);
 
             return make_shared<uint16_t>(stack.top());
+            break;
         }
         case cmd_and: {
             if (stack.size() < 2) {
@@ -149,6 +146,7 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
             stack.push(result);
 
             return make_shared<uint16_t>(stack.top());
+            break;
         }
         case cmd_add: {
             if (stack.size() < 2) {
@@ -176,11 +174,12 @@ shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
 
             stack.push(add_result);
             return make_shared<uint16_t>(stack.top());
-
+            break;
         }
 
         default: 
             return nullptr;
+            break;
     }
 }
 
