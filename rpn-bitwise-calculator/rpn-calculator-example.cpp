@@ -10,6 +10,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -17,7 +18,7 @@ using namespace std;
  * *** STUDENTS WILL NEED TO CHANGE INPUT_CSV_FILE PATH BELOW TO POINT TO THE rpn-input.csv FILE ***
  * *** ON THEIR LAPTOP/COMPUTER ***
  */
-#define INPUT_CSV_FILE "/class-cplusplus/rpn-bitwise-calculator/rpn-input.csv"
+#define INPUT_CSV_FILE "/Users/school/Documents/GitHub/rpn-bitwise-calc/rpn-bitwise-calculator/rpn-input.csv"
 
 // test controls
 #define MIN_VALUE 0
@@ -50,8 +51,21 @@ uint8_t const width = 16U;
 shared_ptr<uint16_t> rpn_calc(command const cmd, uint16_t const value = 0) {
     // this is example code which returns a (smart shared) pointer to 16-bit value
     uint16_t val = 0b1001100100000011;
-    shared_ptr<uint16_t> result = make_shared<uint16_t>(val);
-    return result;
+    static stack<uint16_t> stack;
+
+    switch (cmd) {
+        case cmd_enter: {
+            stack.push(value);
+
+            return make_shared<uint16_t>(stack.top());
+        }
+
+        default: 
+            return nullptr;
+    }
+
+    // shared_ptr<uint16_t> result = make_shared<uint16_t>(val);
+    // return result;
 }
 
 /*
